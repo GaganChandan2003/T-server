@@ -36,7 +36,7 @@ todosController.post("/", authentication, async (req, res) => {
 
 
 // Updating status
-todosController.patch("/:id/status", authentication, async (req, res) => {
+todosController.patch("/status/:id", authentication, async (req, res) => {
     let { id } = req.params;
     const { status } = await TodosModel.findOne({ _id: id });
     let updatedStatus = await TodosModel.findOneAndUpdate({ _id: id }, { status: status ? false : true }, { new: true });
