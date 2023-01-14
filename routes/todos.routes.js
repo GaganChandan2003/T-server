@@ -36,10 +36,10 @@ todosController.post("/", authentication, async (req, res) => {
 
 
 // Updating status
-todosController.patch("/status/:id", authentication, async (req, res) => {
-    let { id } = req.params;
-    const { status } = await TodosModel.findOne({ _id: id });
-    let updatedStatus = await TodosModel.findOneAndUpdate({ _id: id }, { status: status ? false : true }, { new: true });
+todosController.get("/status/:id", authentication, async (req, res) => {
+    let id=req.params.id
+    const data = await TodosModel.findOne({_id:id});
+    let updatedStatus = await TodosModel.findOneAndUpdate({ _id:id}, { status: !data.status }, { new: true });
     try {
         await updatedStatus.save();
         res.status(200).json({ message: "Updated status" })
@@ -51,7 +51,7 @@ todosController.patch("/status/:id", authentication, async (req, res) => {
 
 //Editing todos
 todosController.patch("/:id/edit", authentication, async (req, res) => {
-    let { id } = req.params;
+    let id = req.params.id;
     let { todo } = req.body;
     let date = new Date().toISOString().slice(0, 10)
     let updatedTodo = await TodosModel.findOneAndUpdate({ _id: id }, { todo: todo, date: date }, { new: true });
@@ -66,6 +66,7 @@ todosController.patch("/:id/edit", authentication, async (req, res) => {
 
 //Deleting todo
 todosController.delete("/:id", authentication, async (req, res) => {
+    let  id  = req.params.id;
     let deleted = await TodosModel.findOneAndDelete({ _id: id });
     try {
         res.status(200).send({ messege: "Deleted note", deleted })
